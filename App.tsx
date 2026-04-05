@@ -162,7 +162,7 @@ const AppContent: React.FC = () => {
 
   if (!isLoaded) {
       return (
-          <div className="min-h-[100dvh] bg-game-bg text-game-text flex flex-col items-center justify-center font-mono">
+          <div className="min-h-screen bg-game-bg text-game-text flex flex-col items-center justify-center font-mono">
               <Loader2 size={48} className="text-game-primary animate-spin mb-4" />
               <p className="text-sm font-bold tracking-[0.3em] uppercase opacity-80 animate-pulse">
                   System Initializing...
@@ -259,7 +259,7 @@ const AppContent: React.FC = () => {
             </header>
         )}
 
-        <main className="flex-1 overflow-hidden relative w-full">
+        <main className="flex-1 overflow-hidden relative w-full flex flex-col">
             {renderContent()}
         </main>
 

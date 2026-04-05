@@ -35,7 +35,7 @@ export const AICoach: React.FC = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto no-scrollbar flex flex-col items-center justify-center p-6 text-center space-y-8 animate-fade-in pb-20 bg-game-bg">
+    <div className="flex-1 w-full overflow-y-auto no-scrollbar flex flex-col items-center justify-center p-6 text-center space-y-8 animate-fade-in pb-20 bg-game-bg">
       
       {/* Header */}
       <div className="flex flex-col items-center gap-2">

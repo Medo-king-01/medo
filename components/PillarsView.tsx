@@ -16,7 +16,7 @@ export const PillarsView: React.FC<Props> = ({ onNavigate }) => {
   const { t } = useSettings();
 
   return (
-    <div className="h-full flex flex-col pb-24 bg-game-bg text-game-text animate-fade-in overflow-y-auto no-scrollbar relative">
+    <div className="flex-1 w-full flex flex-col pb-24 bg-game-bg text-game-text animate-fade-in overflow-y-auto no-scrollbar relative">
       
       {/* Background Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -191,7 +191,7 @@ export const SettingsScreen: React.FC = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto no-scrollbar pb-24 animate-fade-in bg-game-bg text-game-text">
+    <div className="flex-1 w-full overflow-y-auto no-scrollbar pb-24 animate-fade-in bg-game-bg text-game-text">
       
       {/* Header */}
       <div className="sticky top-0 z-20 bg-game-bg/90 backdrop-blur-md p-4 border-b border-game-primary/30 flex items-center gap-3">

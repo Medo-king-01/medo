@@ -60,7 +60,7 @@ export const Dashboard: React.FC<Props> = ({ onNavigateToPillar, onOpenSettings,
 
   return (
     // Replaced bg-game-black with bg-game-bg and text-white with text-game-text
-    <div className="h-full overflow-y-auto no-scrollbar space-y-6 pb-32 animate-fade-in bg-game-bg text-game-text relative transition-colors duration-300 font-sans">
+    <div className="flex-1 w-full overflow-y-auto no-scrollbar space-y-6 pb-32 animate-fade-in bg-game-bg text-game-text relative transition-colors duration-300 font-sans">
       
       {/* Background Grid - System Theme */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20" 
