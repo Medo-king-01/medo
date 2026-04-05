@@ -1,0 +1,5 @@
+{
+  "name": "Solo Task",
+  "description": "A fully offline, deterministic productivity RPG. Features a local rule engine for stats, energy, and progression without external AI dependencies.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    <title>Solo Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Cairo', 'sans-serif'],
+              mono: ['Courier New', 'monospace'],
+            },
+            colors: {
+              // Dynamic Theme Colors (Linked to CSS Variables)
+              'game-bg': 'rgb(var(--color-bg) / <alpha-value>)',
+              'game-surface': 'rgb(var(--color-surface) / <alpha-value>)',
+              'game-surface-highlight': 'rgb(var(--color-surface-highlight) / <alpha-value>)',
+              'game-border': 'rgb(var(--color-border) / <alpha-value>)',
+              
+              'game-primary': 'rgb(var(--color-primary) / <alpha-value>)',
+              'game-primary-dim': 'rgb(var(--color-primary-dim) / <alpha-value>)',
+              'game-accent': 'rgb(var(--color-accent) / <alpha-value>)',
+              
+              'game-text': 'rgb(var(--color-text) / <alpha-value>)',
+              'game-text-muted': 'rgb(var(--color-text-muted) / <alpha-value>)',
+
+              // Static Colors (Legacy/Specific)
+              'game-black': '#050505', 
+              'game-dark': '#0f172a',
+              'game-red': '#ef4444',
+              'game-red-dim': '#7f1d1d',
+              'system-blue': '#2563eb',
+              'system-blue-glow': '#3b82f6',
+              'shadow-purple': '#8b5cf6',
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.4s ease-out',
+              'slide-up': 'slideUp 0.4s ease-out',
+              'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'slash': 'slash 0.4s ease-out forwards',
+              'system-open': 'systemOpen 0.3s ease-out forwards',
+            },
+            keyframes: {
+                fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                pop: { '0%': { transform: 'scale(0.95)', opacity: '0.5' }, '50%': { transform: 'scale(1.05)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+                slash: { 
+                    '0%': { width: '0%', opacity: '0.8' }, 
+                    '50%': { width: '100%', opacity: '1' }, 
+                    '100%': { width: '100%', opacity: '0' } 
+                },
+                systemOpen: {
+                    '0%': { transform: 'scaleY(0)', opacity: '0' },
+                    '100%': { transform: 'scaleY(1)', opacity: '1' }
+                }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        /* Default Fallback (Red/Dark) - Defined in RGB for Tailwind Opacity Support */
+        --color-bg: 5 5 5; /* #050505 */
+        --color-surface: 17 17 17; /* #111111 */
+        --color-surface-highlight: 38 38 38; /* #262626 */
+        --color-border: 64 64 64; /* #404040 */
+        
+        --color-primary: 239 68 68; /* #ef4444 */
+        --color-primary-dim: 127 29 29; /* #7f1d1d */
+        --color-accent: 248 113 113; /* #f87171 */
+        
+        --color-text: 255 255 255;
+        --color-text-muted: 163 163 163;
+        
+        /* Safe Area Variables */
+        --sat: env(safe-area-inset-top);
+        --sab: env(safe-area-inset-bottom);
+        --sal: env(safe-area-inset-left);
+        --sar: env(safe-area-inset-right);
+      }
+
+      body {
+        background-color: rgb(var(--color-bg));
+        color: rgb(var(--color-text));
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior-y: none;
+        overflow: hidden;
+        touch-action: pan-x pan-y;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        height: 100dvh;
+        box-sizing: border-box;
+      }
+      
+      html[lang="en"] { direction: ltr; }
+
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      /* Safe Area Utilities */
+      .pt-safe { padding-top: var(--sat); }
+      .pb-safe { padding-bottom: var(--sab); }
+      .pl-safe { padding-left: var(--sal); }
+      .pr-safe { padding-right: var(--sar); }
+      .mb-safe { margin-bottom: var(--sab); }
+      .mt-safe { margin-top: var(--sat); }
+      .bottom-safe { bottom: var(--sab); }
+      .top-safe { top: var(--sat); }
+
+      /* System Scanlines - Adjusted for theme */
+      .bg-scanlines {
+        background: linear-gradient(to bottom, rgba(var(--color-text),0), rgba(var(--color-text),0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+        background-size: 100% 4px;
+        pointer-events: none;
+      }
+
+      .system-window {
+        background: rgba(var(--color-surface), 0.85);
+        border: 1px solid rgba(var(--color-primary), 0.5);
+        box-shadow: 0 0 15px rgba(var(--color-primary), 0.2), inset 0 0 20px rgba(var(--color-primary), 0.1);
+        backdrop-filter: blur(8px);
+        position: relative;
+      }
+      .system-window::before, .system-window::after {
+        background: linear-gradient(90deg, transparent, rgb(var(--color-primary)), transparent);
+      }
+
+      .text-glow-primary {
+        text-shadow: 0 0 10px rgba(var(--color-primary), 0.8);
+      }
+
+      .slash-line {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 2px;
+        background: rgb(var(--color-text));
+        box-shadow: 0 0 10px rgb(var(--color-text)), 0 0 20px rgb(var(--color-primary));
+        transform: translateY(-50%) rotate(-5deg);
+        z-index: 50;
+        pointer-events: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@capacitor/core": "https://esm.sh/@capacitor/core@^6.0.0",
+    "@capacitor/app": "https://esm.sh/@capacitor/app@^6.0.0",
+    "@capacitor/local-notifications": "https://esm.sh/@capacitor/local-notifications@^6.0.0",
+    "@capacitor/haptics": "https://esm.sh/@capacitor/haptics@^6.0.0",
+    "@capacitor/preferences": "https://esm.sh/@capacitor/preferences@^6.0.0",
+    "@capacitor/splash-screen": "https://esm.sh/@capacitor/splash-screen@^6.0.0",
+    "@capacitor/status-bar": "https://esm.sh/@capacitor/status-bar@^6.0.0",
+    "@capawesome-team/capacitor-android-battery-optimization": "https://esm.sh/@capawesome-team/capacitor-android-battery-optimization@^6.0.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
