@@ -22,6 +22,7 @@ jobs:
       - name: Build Android APK
         run: |
           npx cap sync android
+          chmod +x android/gradlew
           cd android && ./gradlew assembleDebug
 
       - name: Upload APK
