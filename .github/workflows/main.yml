@@ -1,0 +1,49 @@
+name: Build Android APK
+on:
+  push:
+    branches: [ main ] # سيتم البناء تلقائياً عند كل تحديث للكود على فرع main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Web Assets
+        run: npm run build
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Android APK
+        run: |
+          # 1. مزامنة ملفات الويب مع مجلد أندرويد
+          npx cap sync android
+          
+          # 2. الدخول لمجلد أندرويد وإعادة توليد ملفات الـ Wrapper لضمان سلامتها
+          cd android
+          gradle wrapper
+          
+          # 3. إعطاء صلاحية التنفيذ لملف gradlew
+          chmod +x gradlew
+          
+          # 4. بناء ملف الـ APK (النسخة التجريبية)
+          ./gradlew assembleDebug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SoloTask-Debug-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
