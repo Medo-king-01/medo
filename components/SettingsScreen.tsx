@@ -9,6 +9,8 @@ import { AudioService } from '../services/audioService';
 import { NotificationService } from '../services/notifications';
 import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
 import { Capacitor } from '@capacitor/core';
+import { Share } from '@capacitor/share';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 export const SettingsScreen: React.FC = () => {
   const { language, themeColor, darkMode, notificationsEnabled, notificationDuration, soundEnabled, soundVolume, hapticsEnabled, storagePermissionGranted, backupEnabled, timeSyncEnabled, updateSettings, toggleNotifications, t } = useSettings();
@@ -117,22 +119,48 @@ export const SettingsScreen: React.FC = () => {
       updateSettings({ language: lang });
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
       const data = exportSaveData();
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
       const d = new Date();
       const year = d.getFullYear();
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const day = String(d.getDate()).padStart(2, '0');
-      link.download = `solotask_backup_${year}-${month}-${day}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      if(soundEnabled) AudioService.playClick();
-      addToast("تم حفظ النسخة في التنزيلات", "success");
+      const fileName = `solotask_backup_${year}-${month}-${day}.json`;
+
+      if (Capacitor.isNativePlatform()) {
+          try {
+              const result = await Filesystem.writeFile({
+                  path: fileName,
+                  data: data,
+                  directory: Directory.Cache,
+                  encoding: Encoding.UTF8,
+              });
+
+              await Share.share({
+                  title: 'Solo Task Backup',
+                  text: 'Here is your Solo Task backup file.',
+                  url: result.uri,
+                  dialogTitle: 'Save or Share Backup',
+              });
+              
+              if(soundEnabled) AudioService.playClick();
+              addToast("تم تجهيز النسخة للمشاركة", "success");
+          } catch (e) {
+              console.error('Error sharing backup:', e);
+              addToast("حدث خطأ أثناء تصدير النسخة", "error");
+          }
+      } else {
+          const blob = new Blob([data], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          if(soundEnabled) AudioService.playClick();
+          addToast("تم حفظ النسخة في التنزيلات", "success");
+      }
   };
 
   const handleImportClick = () => {
